@@ -25,7 +25,7 @@ It provides questionnaires, motivational content, yoga exercises, and guidance f
 
 ## 📸 Screenshots
 - **Welcome Page**  
-  ![Welcome Page](screenshots/welcome.png)
+  ![Welcome Page](https://github.com/fathimanihalak/MamaMind-App/blob/main/Screenshot%20(62).png)
 
 - **Questionnaire Page**  
   ![Questionnaire](screenshots/questionnaire.png)
@@ -39,5 +39,6 @@ It provides questionnaires, motivational content, yoga exercises, and guidance f
   
 ## 🤝 Contributing
 Contributions are welcome! Feel free to fork this repo and submit a pull request.
+
 
 
