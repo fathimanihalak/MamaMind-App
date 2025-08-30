@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+    
+<head>
+    <meta charset="UTF-8">
+    
+    <title>Welcome to MamaMind</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+      
+        :root {
+          --primary: #bb4e72;
+          --secondary: #c76ba0;
+          --bg-overlay: rgba(255, 255, 255, 0.65);
+          --text-dark: #333;
+          --shadow: rgba(0, 0, 0, 0.1);
+        }
+      
+        body {
+            
+          margin: 0;
+          padding: 0;
+          font-family: 'Poppins', sans-serif;
+          background: url("{{ url_for('static', filename='welcome.jpg') }}") center/cover no-repeat;
+          height: 100vh;
+        }
+      
+        .overlay {
+             background-color: rgba(255,255,255,0.65); 
+             padding: 1.5rem 1rem;      /* less vertical padding */
+             text-align: center;
+            }
+
+      
+        h1 {
+          margin: 1rem 0 0.5rem;
+          font-size: 3rem;
+          color: var(--primary);
+          text-shadow: 1px 1px var(--shadow);
+        }
+      
+        p.subtitle {
+          font-size: 1.6rem;
+          margin: 0 0 1rem;
+          max-width: 700px;
+          color: var(--text-dark);
+          line-height: 1.4;
+        }
+      
+        .info-sections {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+            width: 90%;
+            max-width: 1000px;
+            margin: 3rem auto 2rem;    /* no top margin, auto‑centered */
+        }
+
+      
+        .tips-section,
+        .awareness-section {
+          background: var(--bg-overlay);
+          padding: 1.5rem;
+          border-radius: 1rem;
+          box-shadow: 0 8px 16px var(--shadow);
+          opacity: 0;
+          transform: translateY(20px);
+          transition: transform 0.6s ease, opacity 0.6s ease;
+        }
+      
+        .tips-section.slide-in,
+        .awareness-section.slide-in {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      
+        h2.section-title {
+          font-size: 1.5rem;
+          color: var(--secondary);
+          margin-bottom: 1rem;
+        }
+      
+        ul {
+          list-style: none;
+          padding: 0;
+          color: var(--text-dark);
+          font-size: 1rem;
+          line-height: 1.5;
+        }
+      
+        ul li {
+          margin-bottom: 0.8rem;
+        }
+      
+        .start-btn {
+          background-color: var(--primary);
+          color: #fff;
+          padding: 0.8rem 2rem;
+          font-size: 1.1rem;
+          font-weight: 600;
+          border: none;
+          border-radius: 2rem;
+          cursor: pointer;
+          box-shadow: 0 4px 12px var(--shadow);
+          transition: transform 0.3s ease, box-shadow 0.3s ease;
+          margin: 1.5rem 0;               /* space above/below button */
+        }
+      
+        .start-btn:hover {
+          transform: translateY(-2px) scale(1.03);
+          box-shadow: 0 8px 24px var(--shadow);
+        }
+        .tip-section {
+            text-align: center;
+            padding: 30px 10px;
+            margin-top: 40px;
+            background-color: rgba(255, 255, 255, 0.85);
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }.section-title {
+            font-size: 28px;
+            margin-bottom: 20px;
+            color: #444;
+            font-weight: bold;
+        }
+        .tips-card {
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.85);
+            border-radius: 15px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            width: 420px;
+            text-align: center;
+            margin: auto;
+        }
+        .chart-container {
+            width: 400px;
+            height: 400px;
+            margin: 0 auto;
+        }
+
+
+      </style>
+      
+      <script>
+        // When DOM loads, add class to trigger slide-in
+        window.addEventListener('DOMContentLoaded', () => {
+          document.querySelectorAll('.tips-section, .awareness-section')
+            .forEach(el => el.classList.add('slide-in'));
+        });
+      </script>
+      <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+      
+</head>
+<body>
+    {% if user %}
+        <div style="text-align: right; padding: 10px; margin-right: 20px;">
+            <h3 style="display: inline; color: #bb4e72;">Welcome, {{ user }}!</h3>
+            <a href="{{ url_for('logout') }}" style="margin-left: 15px; text-decoration: none; color: #333;">Logout</a>
+        </div>
+    {% endif %}
+
+    <div class="overlay">
+        <h1>Welcome to MamaMind</h1>
+        <p>Your gentle companion from pregnancy to postpartum wellness. Let’s take care of your emotional well-being together. Discover tips, track your feelings, and learn more about postpartum wellness.</p>
+
+    </div>
+    <div class="info-sections">
+            <div class="card tips-card">
+    <h2>Pregnancy Tips</h2>
+    <div class="chart-container">
+        <canvas id="tipsChart" width="400" height="400"></canvas>
+    </div>
+</div>
+
+        </section>
+    
+        <section class="awareness-section">
+            <h2>Understanding Postpartum Depression</h2>
+            <p>
+                Postpartum Depression (PPD) is more common than you might think — and it’s nothing to be ashamed of.
+                It can affect new mothers emotionally and physically. Knowing about it early helps you take care of yourself.
+            </p>
+            <ul>
+                <li>💛 It's okay to feel overwhelmed.</li>
+                <li>💛 You're not alone — many moms feel this way.</li>
+                <li>💛 Early awareness can help you prepare and recover faster.</li>
+                <button class="start-btn" onclick="window.location.href='/quiz'">Lets Check!!!</button>
+            </ul>
+        </section>
+    </div>
+    </div>
+    <div class="tip-section">
+        <h2 class="section-title">Pregnancy Tips</h2>
+        <canvas id="tipsChart" width="400" height="400"></canvas>
+    </div>
+    <script>
+        const ctx = document.getElementById('tipsChart').getContext('2d');
+    
+        const tipsChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: [
+                    'Stay Hydrated',
+                    'Eat Balanced Meals',
+                    'Regular Checkups',
+                    'Gentle Exercise',
+                    'Rest Well'
+                ],
+                datasets: [{
+                    label: 'Pregnancy Tips',
+                    data: [20, 20, 20, 20, 20],
+                    backgroundColor: [
+                        '#FFD1DC',
+                        '#C1E1C1',
+                        '#FFECB3',
+                        '#ADD8E6',
+                        '#D9B3FF'
+                    ],
+                    borderColor: '#fff',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            color: '#444',
+                            font: {
+                                size: 14,
+                                weight: 'bold'
+                            }
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const tips = {
+                                    'Stay Hydrated': 'Drink plenty of water every day.',
+                                    'Eat Balanced Meals': 'Include fruits, veggies, and protein.',
+                                    'Regular Checkups': 'Visit your doctor regularly.',
+                                    'Gentle Exercise': 'Try prenatal yoga or walking.',
+                                    'Rest Well': 'Get enough sleep and avoid stress.'
+                                };
+                                return tips[context.label];
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+    
+</body>
+</html>

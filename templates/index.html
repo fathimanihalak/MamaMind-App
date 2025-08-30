@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>MamaMind Depression Predictor</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: url('/static/baby2.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 100vh;
+        }
+
+        .form-container {
+            display: flex;
+            justify-content: center;   /* centers horizontally */
+            align-items: center;       /* centers vertically */
+            height: 100vh;             /* full screen height */
+            background-image: url('/static/background.jpg');  /* optional background */
+            background-size: cover;
+            background-position: center;
+        }
+        .form-box {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+        h2 {
+            color: #333;
+        }
+
+        .question {
+            margin-bottom: 15px;
+        }
+
+        select {
+            width: 100%;
+            padding: 5px;
+            margin-top: 5px;
+        }
+
+        .submit-btn {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin-top: 15px;
+            cursor: pointer;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-weight: bold;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="form-box">
+            <h2>Postpartum Depression Questionnaire (EPDS)</h2>
+            <form id="quizForm">
+                <!-- Questions -->
+                <div class="question">1. I have been able to laugh and see the funny side of things.
+                    <select name="q1">
+                        <option value="0">As much as I always could</option>
+                        <option value="1">Not quite so much now</option>
+                        <option value="2">Definitely not so much now</option>
+                        <option value="3">Not at all</option>
+                    </select>
+                </div>
+    
+                <div class="question">2. I have looked forward with enjoyment to things.
+                    <select name="q2">
+                        <option value="0">As much as I ever did</option>
+                        <option value="1">Rather less than I used to</option>
+                        <option value="2">Definitely less than I used to</option>
+                        <option value="3">Hardly at all</option>
+                    </select>
+                </div>
+    
+                <div class="question">3. I have blamed myself unnecessarily when things went wrong.
+                    <select name="q3">
+                        <option value="0">No, never</option>
+                        <option value="1">Not very often</option>
+                        <option value="2">Yes, some of the time</option>
+                        <option value="3">Yes, most of the time</option>
+                    </select>
+                </div>
+    
+                <div class="question">4. I have been anxious or worried for no good reason.
+                    <select name="q4">
+                        <option value="0">No, not at all</option>
+                        <option value="1">Hardly ever</option>
+                        <option value="2">Yes, sometimes</option>
+                        <option value="3">Yes, very often</option>
+                    </select>
+                </div>
+    
+                <div class="question">5. I have felt scared or panicky for no very good reason.
+                    <select name="q5">
+                        <option value="0">No, not at all</option>
+                        <option value="1">No, not much</option>
+                        <option value="2">Yes, sometimes</option>
+                        <option value="3">Yes, quite a lot</option>
+                    </select>
+                </div>
+    
+                <div class="question">6. Things have been getting on top of me.
+                    <select name="q6">
+                        <option value="0">No, I have been coping as well as ever</option>
+                        <option value="1">No, most of the time I have coped quite well</option>
+                        <option value="2">Yes, sometimes I haven’t been coping as well as usual</option>
+                        <option value="3">Yes, most of the time I haven’t been able to cope at all</option>
+                    </select>
+                </div>
+    
+                <div class="question">7. I have been so unhappy that I have had difficulty sleeping.
+                    <select name="q7">
+                        <option value="0">No, not at all</option>
+                        <option value="1">Not very often</option>
+                        <option value="2">Yes, sometimes</option>
+                        <option value="3">Yes, most of the time</option>
+                    </select>
+                </div>
+    
+                <div class="question">8. I have felt sad or miserable.
+                    <select name="q8">
+                        <option value="0">No, not at all</option>
+                        <option value="1">Not very often</option>
+                        <option value="2">Yes, quite often</option>
+                        <option value="3">Yes, most of the time</option>
+                    </select>
+                </div>
+    
+                <div class="question">9. I have been so unhappy that I have been crying.
+                    <select name="q9">
+                        <option value="0">No, never</option>
+                        <option value="1">Only occasionally</option>
+                        <option value="2">Yes, quite often</option>
+                        <option value="3">Yes, most of the time</option>
+                    </select>
+                </div>
+    
+                <div class="question">10. The thought of harming myself has occurred to me.
+                    <select name="q10">
+                        <option value="0">Never</option>
+                        <option value="1">Hardly ever</option>
+                        <option value="2">Sometimes</option>
+                        <option value="3">Yes, quite often</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="submit-btn">Submit</button>
+            </form>
+            <div id="result"></div>
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('quizForm');
+        const resultDiv = document.getElementById('result');
+
+        form.addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const answers = [];
+            for (let i = 1; i <= 10; i++) {
+                const val = parseInt(form[`q${i}`].value);
+                answers.push(val);
+            }
+
+            const response = await fetch('/predict', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ answers })
+            });
+
+            const data = await response.json();
+            if (data.stage && data.suggestion) {
+                resultDiv.innerHTML = `
+                    <p><strong>Depression Stage:</strong> ${data.stage}</p>
+                    <p><strong>Suggestions:</strong> ${data.suggestion}</p>
+                `;
+            } else {
+                resultDiv.innerText = 'Error: Could not calculate result';
+            }
+        });
+    </script>
+</body>
+</html>
